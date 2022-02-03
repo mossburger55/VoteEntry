@@ -2,9 +2,7 @@
 VoteEntry function in Election Run Off Program
 ```
 public static List<string> VoteEntry (int voters, int ranks, List<string> candidateList)
-{
-    voters = 2;
-    ranks = 2;
+        {
             var votesEntered = new List<string>();
             // create and fill selection list for ranking choices with user inputs
             var selection = new List<string>();
@@ -90,6 +88,6 @@ public static List<string> VoteEntry (int voters, int ranks, List<string> candid
                 break;
             }
             return votesEntered;
-        }              
+        }                        
             
 ```
