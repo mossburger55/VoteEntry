@@ -1,4 +1,4 @@
-# VoteEntry
+# VoteEntry C#
 VoteEntry function in Election Run Off Program
 
 public static List<string> VoteEntry (int voters, int ranks, List<string> candidateList)
