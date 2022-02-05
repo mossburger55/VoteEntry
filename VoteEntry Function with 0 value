@@ -1,0 +1,120 @@
+Added some new functions including allowing an administorator to choose the minimum choices a voter should make as well as user can enter "0" if they want to vote for less candidates than required. 
+
+'''
+public static List<int> VoteEntry(int voters, int ranks, List<string> candidateList)
+        {
+            var votesEntered = new List<int>();
+            // create and fill selection list for ranking choices with user inputs
+            var selection = new List<string>();
+
+            for (var k = 0; k < candidateList.Count; k++)//display cadidates with numbers
+            {
+                Console.WriteLine("{0}) {1}", k + 1, candidateList[k]);
+            }
+            Console.WriteLine("0) no selection");
+            int minNum;
+            while (true)
+            {
+                Console.WriteLine("The minimum number of candidates a voter should choose: ");
+                var minCandidate = Console.ReadLine();
+                minNum = Convert.ToInt32(minCandidate);
+                if (minNum <= ranks)
+                    break;
+            }
+            Console.WriteLine("Please choose {0} candidate(s) represented by numbers", minNum);
+            Console.WriteLine("(e.g. For 1.John Smith, you enter 1).");
+            Console.WriteLine("You can enter 0 if the voter did not choose all the preferences.");
+            Console.WriteLine("Please press 'enter key' once to enter the next vote.");
+            Console.WriteLine();
+            var i = 0;
+            while (i < voters)//i represents each voter
+            {
+                var choiceRanks = new List<string>();
+
+                var j = 0;
+                var zero = 0;
+
+                while (j < ranks)
+                {
+                    Console.Write("voter{0}: ", i + 1);
+                    var temp = Console.ReadLine();
+
+                    if (!String.IsNullOrWhiteSpace(temp))
+                    {
+                        //while (d < temp.Length) breaks down string to char to make sure each char is valid
+                        var d = 0;
+                        while (d < temp.Length)
+                        {
+                            //skip any white space from the user input
+                            if (Char.IsWhiteSpace(temp[d]))
+                                d++;
+                            //any valid number will be stored to a list (choiceRank)
+                            else if (Char.IsDigit(temp[d]))
+                            {
+                                choiceRanks.Add(temp[d].ToString());
+                                d++;
+                            }
+                            else// cover non digit inputs
+                                d++;
+                        }
+                        //put each char into one string to cover any number bigger than 9
+                        var joined = String.Join("", choiceRanks.ToArray());
+                        if (!String.IsNullOrWhiteSpace(joined))
+                        {
+                            if (joined == "0")
+                            {
+                                if (j == 0)
+                                {
+                                    Console.WriteLine("The first choice cannot be 0.");
+                                    choiceRanks.Clear();
+                                }
+                                else
+                                {
+                                    zero++;
+                                    if (zero > ranks - minNum)
+                                    {
+                                        Console.WriteLine("Voter needs to choose {0} candidate.", minNum);
+                                        choiceRanks.Clear();
+                                    }
+                                    else
+                                    {
+                                        selection.Add(joined);
+                                        choiceRanks.Clear();
+                                        j++;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                for (var k = 0; k < candidateList.Count; k++)
+                                {
+                                    if (Convert.ToInt32(joined) == k + 1)
+                                    {
+                                        //the final step to add each value to a list 
+                                        if (!selection.Contains(joined))
+                                        {
+                                            selection.Add(joined);
+                                            //clear the list so we can store the next value
+                                            choiceRanks.Clear();
+                                            j++;
+                                            //if statement to see if have enough values(j) stored for each voter(i)
+                                        }
+                                    }
+                                    else
+                                        choiceRanks.Clear();
+                                }
+                            }
+                        }
+                    }
+                }
+                //move the values from voter(i) to votesEntered => use it for vote counting 
+                foreach (var choice in selection)
+                    votesEntered.Add(Convert.ToInt32(choice));
+                //clear selection list, so it can store next voter(i)'s values 
+                selection.Clear();
+                //increment i to end while (j < ranks)
+                i++;
+            }
+            return votesEntered;
+        }
+        '''
